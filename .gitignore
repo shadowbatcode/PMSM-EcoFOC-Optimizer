@@ -1,0 +1,24 @@
+# MATLAB autosave and temporary files
+*.asv
+*.m~
+*.tmp
+
+# Simulink generated caches and code generation output
+slprj/
+*.slxc
+*_ert_rtw/
+*_grt_rtw/
+*_rtw/
+codegen/
+
+# MATLAB test/runtime output
+*.log
+*.mex*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keep canonical result artifacts committed; do not ignore *.mat or *.csv here.

@@ -1,0 +1,12 @@
+*.slx binary
+*.slxc binary
+*.mat binary
+*.fig binary
+*.png binary
+*.docx binary
+*.pptx binary
+
+*.m text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+*.ps1 text eol=crlf

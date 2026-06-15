@@ -1,0 +1,4 @@
+case_name,condition,method,overshoot_pct,settling_time_2pct_s,settling_time_5pct_s,steady_error_rpm,max_speed_drop_rpm,recovery_time_s,steady_id_A,steady_iq_A,steady_is_A,iq_peak_A,current_limit_time_s,mean_Pin_W,mean_Pout_W,mean_eta_pct,mean_Pcu_W,pin_reduction_vs_id0_pct,pin_diff_vs_mtpa_pct,id_convergence_time_s,steady_detector_start_s,freeze_count,constraint_trigger_count,gradient_rms
+"constraints","base","id0",0,,,509.6856661,,,10.93182438,16.89883321,20.12648375,23.9923891,0,1549.937104,1063.846686,68.63805529,486.0904177,0,1.231201944,0,,0,2,0
+"constraints","base","mtpa",0,,,154.587954,,,7.780456213,12.91725234,15.07948629,23.96059212,0.0181,1531.086339,1258.217251,82.17807309,272.8690883,1.216227725,0,0.0346,,0,2,0
+"constraints","base","mfo",0,,,509.6856661,,,10.93182438,16.89883321,20.12648375,23.9923891,0,1549.937104,1063.846686,68.63805529,486.0904177,0,1.231201944,0,,0,2,499.3875774
