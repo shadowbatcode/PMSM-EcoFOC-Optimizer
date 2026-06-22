@@ -18,7 +18,7 @@ scripts/build_models.m -----> models/*.slx
 scripts/run_all.m --------> src/pmsm_foc_step.m
         |
         v
-results/*.csv, results/*.mat, figures/*.png
+results/*.csv, results/*.mat, figures_chapter3/*.png
 ```
 
 The key design choice is to keep the controller and plant math in one shared
@@ -149,7 +149,6 @@ Generated artifacts:
 - `results/comparison_table.csv`
 - `results/comparison_table.mat`
 - `results/data/all_results.mat`
-- `figures/*.png`
 - `figures_chapter3/*.png`
 
 ## Design boundaries

@@ -36,10 +36,16 @@ $requiredFiles = @(
     "docs/REPRODUCIBILITY.md",
     "models/PMSM_FOC_Baseline.slx",
     "models/PMSM_FOC_Optimization.slx",
+    "models/PMSM_FOC_Component_Baseline.slx",
+    "models/PMSM_FOC_Component_Optimization.slx",
     "scripts/init_parameters.m",
     "scripts/build_models.m",
+    "scripts/build_component_models.m",
+    "scripts/beautify_component_models.m",
+    "scripts/generate_paper_aligned_outputs.m",
     "scripts/run_all.m",
     "scripts/run_case_set.m",
+    "scripts/run_component_efficiency_case.m",
     "scripts/run_speed_step.m",
     "scripts/run_efficiency_optimization.m",
     "scripts/run_load_step.m",
@@ -54,42 +60,18 @@ $requiredFiles = @(
     "src/pmsm_foc_output_names.m",
     "results/comparison_table.csv",
     "results/comparison_table.mat",
-    "figures/simulink_optimization_layout.png",
-    "figures/fig_speed_step.png",
-    "figures/fig_efficiency_optimization.png",
-    "figures/fig_load_step.png",
-    "figures/fig_parameter_perturbation.png",
-    "figures/fig_constraint_test.png"
+    "tables_chapter3/table3_1_simulation_parameters.csv",
+    "tables_chapter3/table3_2_simulation_cases.csv",
+    "tables_chapter3/table3_3_performance_comparison.csv",
+    "tables_chapter3/document_result_comparison.md",
+    "chapter3_insert_order.md"
 )
 
 foreach ($rel in $requiredFiles) {
     Assert-Exists (Join-Path $ProjectRoot $rel) "Required file missing: $rel"
 }
 
-$paperFigures = @(
-    "figures/paper/paper_dual_layer_energy_optimization_architecture.png",
-    "figures/paper/paper_system_working_mechanism.png",
-    "figures/paper/paper_pmsm_vector_control_modeling.png",
-    "figures/paper/paper_control_time_scale_separation.png",
-    "figures/paper/paper_controller_structure.png",
-    "figures/paper/paper_simulink_overall_model.png",
-    "figures/paper/paper_model_free_optimizer_subsystem.png",
-    "figures/paper/paper_speed_step_response.png",
-    "figures/paper/paper_power_id_convergence.png",
-    "figures/paper/paper_load_disturbance_response.png"
-)
-
-foreach ($rel in $paperFigures) {
-    Assert-NonEmptyFile (Join-Path $ProjectRoot $rel) "Paper figure missing or empty: $rel"
-}
-
 $requiredFigures = @(
-    "figures/simulink_optimization_layout.png",
-    "figures/fig_speed_step.png",
-    "figures/fig_efficiency_optimization.png",
-    "figures/fig_load_step.png",
-    "figures/fig_parameter_perturbation.png",
-    "figures/fig_constraint_test.png",
     "figures_chapter3/fig3_1_simulink_overall_model.png",
     "figures_chapter3/fig3_2_model_free_optimizer_subsystem.png",
     "figures_chapter3/fig3_3_speed_step_response.png",
@@ -107,6 +89,7 @@ Assert-NonEmptyFile (Join-Path $ProjectRoot "results/comparison_table.mat") "Com
 $forbiddenPaths = @(
     "slprj",
     "scripts/slprj",
+    "figures",
     "results/figures",
     "experiments",
     "simulink"
@@ -124,7 +107,7 @@ if ($cacheFiles.Count -gt 0) {
 }
 
 $readme = Get-Content -LiteralPath (Join-Path $ProjectRoot "README.md") -Raw -Encoding UTF8
-foreach ($needle in @("PMSM EcoFOC Optimizer", "_legacy_from_copied_project", "pmsm_foc_step.m", "run_all.m", "paper-reported simulation summary")) {
+foreach ($needle in @("PMSM EcoFOC Optimizer", "figures_chapter3/fig3_1_simulink_overall_model.png", "R2025b", "generate_paper_aligned_outputs.m", "table3_3_performance_comparison.csv")) {
     if ($readme -notmatch [regex]::Escape($needle)) {
         throw "README missing expected text: $needle"
     }

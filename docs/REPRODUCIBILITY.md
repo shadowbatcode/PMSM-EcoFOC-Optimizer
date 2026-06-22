@@ -37,11 +37,11 @@ results/comparison_table.mat
 results/tables/component_efficiency_optimization.csv
 results/data/all_results.mat
 results/logs/last_run_status.txt
-figures/fig_speed_step.png
-figures/fig_efficiency_optimization.png
-figures/fig_load_step.png
-figures/fig_parameter_perturbation.png
-figures/fig_constraint_test.png
+figures_chapter3/fig3_1_simulink_overall_model.png
+figures_chapter3/fig3_2_model_free_optimizer_subsystem.png
+figures_chapter3/fig3_3_speed_step_response.png
+figures_chapter3/fig3_4_power_id_convergence.png
+figures_chapter3/fig3_5_disturbance_response.png
 ```
 
 For the visible component models:
