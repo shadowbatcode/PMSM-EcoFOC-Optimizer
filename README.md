@@ -27,6 +27,9 @@ scenario scripts, result tables, and paper figures are all included.
 - Executable Simulink wrappers:
   `models/PMSM_FOC_Baseline.slx` and
   `models/PMSM_FOC_Optimization.slx`.
+- Visible R2025b component models:
+  `models/PMSM_FOC_Component_Baseline.slx` and
+  `models/PMSM_FOC_Component_Optimization.slx`.
 - Shared numerical engine between MATLAB scripts and Simulink through
   `src/pmsm_foc_step.m` and `src/pmsm_foc_sfunc.m`.
 - Five reproduced studies: speed step, steady-state energy optimization, load
@@ -112,9 +115,9 @@ the perturbation back in and resumes energy seeking.
 
 | Asset | Count |
 |---|---:|
-| MATLAB source/script files | 16 |
-| MATLAB source/script lines | 1250 |
-| Executable Simulink models | 2 |
+| MATLAB source/script files | 18 |
+| MATLAB source/script lines | 1900+ |
+| Executable Simulink models | 4 |
 | Paper figures extracted for README | 10 |
 | Generated/reproducible PNG figures | 11 |
 | Result CSV files | 2 |
@@ -128,7 +131,9 @@ the perturbation back in and resumes energy seeking.
 |   `-- REPRODUCIBILITY.md
 |-- models/
 |   |-- PMSM_FOC_Baseline.slx
-|   `-- PMSM_FOC_Optimization.slx
+|   |-- PMSM_FOC_Optimization.slx
+|   |-- PMSM_FOC_Component_Baseline.slx
+|   `-- PMSM_FOC_Component_Optimization.slx
 |-- scripts/
 |   |-- init_parameters.m
 |   |-- build_models.m
@@ -155,8 +160,8 @@ material.
 
 Required environment:
 
-- MATLAB R2021a
-- Simulink R2021a
+- MATLAB R2025b
+- Simulink R2025b
 - PowerShell for package checks on Windows
 
 Run the full reproduction:
@@ -168,6 +173,31 @@ run('scripts/build_models.m')
 run('scripts/run_all.m')
 ```
 
+Run the visible R2025b component-model reproduction:
+
+```matlab
+run('scripts/build_component_models.m')
+run('scripts/beautify_component_models.m')
+run('scripts/run_component_efficiency_case.m')
+```
+
+The component models expose the real control chain as separate Simulink
+components: `Speed_Controller_PID`, `ModelFree_Optimizer`, `Safety_Projection`,
+`Current_Controller_PI`, `PMSM_dq_Plant`, and `Power_Efficiency_Monitor`. They
+contain no top-level S-Function block.
+
+Generate thesis-aligned Chapter 3 figures, tables, and comparison notes:
+
+```matlab
+run('scripts/generate_paper_aligned_outputs.m')
+```
+
+This writes `figures_chapter3/fig3_1...fig3_5`,
+`tables_chapter3/table3_1...table3_3`, and
+`tables_chapter3/document_result_comparison.md`. The comparison report keeps the
+current R2025b component-model results separate from the legacy Word/Chapter 3
+numbers so the document can be revised without silently mixing data sources.
+
 Run the lightweight package check:
 
 ```powershell
@@ -178,20 +208,21 @@ powershell -ExecutionPolicy Bypass -File tests/Verify_Project_Package.ps1
 
 The repository also includes a reproducible engineering result table generated
 by `scripts/run_all.m` at `results/comparison_table.csv`. In the checked-in
-parameter set, the optimizer pipeline produces small but consistent input-power
-reductions across the simulated cases:
+R2025b parameter set, the optimizer reproduces the paper-scale steady-state
+energy improvement while keeping the speed transient essentially unchanged:
 
 | Case | Baseline Pin W | Optimized Pin W | Pin reduction |
 |---|---:|---:|---:|
-| speed_step | 362.2681 | 362.2604 | 0.0021% |
-| efficiency_optimization | 272.0886 | 272.0851 | 0.0013% |
-| load_step | 713.7116 | 713.6817 | 0.0042% |
-| parameter_perturbed | 278.2831 | 278.2813 | 0.0006% |
-| constraint_test | 1295.6536 | 1295.6397 | 0.0011% |
+| speed_step | 362.2681 | 362.0360 | 0.0641% |
+| efficiency_optimization | 272.0886 | 271.8278 | 0.0959% |
+| load_step | 713.7116 | 708.2181 | 0.7696% |
+| parameter_perturbed | 278.2831 | 278.4980 | -0.0772% |
+| constraint_test | 1295.6536 | 1294.3343 | 0.1018% |
 
-These values are included for reproducibility. The stronger outcome table above
-is the paper-reported simulation summary, while this table documents the current
-executable project state.
+The steady-state energy case is close to the paper's reported 0.11% input-power
+reduction and 1.05% stator-current reduction. The parameter-perturbed case is
+kept in the table as a robustness boundary: under that artificial mismatch the
+optimizer may freeze or move conservatively rather than guarantee improvement.
 
 ## Documentation
 

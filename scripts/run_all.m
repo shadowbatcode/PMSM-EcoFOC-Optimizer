@@ -4,7 +4,8 @@ end
 
 baselineModel = fullfile(p.paths.models, 'PMSM_FOC_Baseline.slx');
 optimizationModel = fullfile(p.paths.models, 'PMSM_FOC_Optimization.slx');
-if exist(baselineModel, 'file') ~= 2 || exist(optimizationModel, 'file') ~= 2
+if exist(baselineModel, 'file') ~= 2 || exist(optimizationModel, 'file') ~= 2 || ...
+        model_output_contract_is_stale(baselineModel) || model_output_contract_is_stale(optimizationModel)
     run(fullfile(p.paths.scripts, 'build_models.m'));
 end
 
@@ -30,6 +31,18 @@ save(fullfile(p.paths.data, 'all_results.mat'), 'allResults', 'metrics', 'p');
 cleanup_simulink_artifacts(p);
 fid = fopen(fullfile(p.paths.logs, 'last_run_status.txt'), 'w');
 if fid >= 0
-    fprintf(fid, 'run_all completed at %s\n', datestr(now));
+    fprintf(fid, 'run_all completed at %s\n', string(datetime('now')));
     fclose(fid);
+end
+
+function stale = model_output_contract_is_stale(modelPath)
+try
+    [~, modelName] = fileparts(modelPath);
+    load_system(modelPath);
+    demuxPath = [modelName '/Signal_Bus_Demux'];
+    stale = str2double(get_param(demuxPath, 'Outputs')) ~= numel(pmsm_foc_output_names());
+    close_system(modelName, 0);
+catch
+    stale = true;
+end
 end

@@ -54,26 +54,31 @@ p.current.q.Kp = 8.5;
 p.current.q.Ki = 850;
 p.current.current_ff_gain = 1.0;
 
-% Model-free extremum-seeking optimizer.
-p.optimizer.perturbation_amplitude = 0.18;
+% Model-free extremum-seeking optimizer. The R2025b tuning below targets the
+% paper-scale operating point where a small negative d-axis current reduces
+% input power without changing the speed-loop transient materially.
+p.optimizer.perturbation_amplitude = 0.10;
 p.optimizer.omega_d = 2*pi*6.0;
-p.optimizer.power_lpf_tau = 0.18;
-p.optimizer.gradient_lpf_tau = 0.30;
-p.optimizer.alpha = 0.08;
+p.optimizer.power_lpf_tau = 0.06;
+p.optimizer.gradient_lpf_tau = 0.10;
+p.optimizer.alpha = 10.0;
 p.optimizer.update_period = p.Ts;
-p.optimizer.max_id_bar_step = 1.0e-4;
-p.optimizer.id_rate_limit = 5.0;
+p.optimizer.max_id_bar_step = 2.0e-3;
+p.optimizer.id_rate_limit = 25.0;
 p.optimizer.resume_ramp_time = 0.05;
 p.optimizer.freeze_ramp_time = 0.08;
 p.optimizer.voltage_projection_step = 0.02;
 p.optimizer.id_bar_initial = 0;
+p.optimizer.search_bias_rate = 0.0;
+p.optimizer.search_bias_tau = 1.0;
+p.optimizer.search_bias_stop_id = -Inf;
 
 % Steady-state detector and dynamic freeze.
 p.steady.omega_error_threshold = 5.0;
 p.steady.id_error_threshold = 0.5;
 p.steady.iq_error_threshold = 0.5;
-p.steady.power_slope_threshold = 2.0;
-p.steady.hold_time = 0.10;
+p.steady.power_slope_threshold = 30.0;
+p.steady.hold_time = 0.03;
 
 % Required experiment scenarios.
 p.exp.speed_step.t_step = 0.5;
@@ -98,8 +103,8 @@ p.random_seed = 42;
 p.method_order = {'baseline', 'optimization'};
 p.method_label.baseline = 'i_d^*=0';
 p.method_label.optimization = 'Model-free optimization';
-p.version.matlab = 'R2021a';
-p.version.simulink = 'R2021a';
+p.version.matlab = 'R2025b';
+p.version.simulink = 'R2025b';
 
 dirs = {p.paths.results, p.paths.figures, p.paths.chapter_figures, p.paths.data, p.paths.tables, p.paths.logs, p.paths.models, p.paths.legacy};
 for k = 1:numel(dirs)

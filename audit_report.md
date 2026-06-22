@@ -1,6 +1,7 @@
 # Technical Audit Report
 
-Generated for GitHub packaging on 2026-06-15.
+Generated for GitHub packaging on 2026-06-15 and refreshed for MATLAB/Simulink
+R2025b on 2026-06-22.
 
 ## Project identity
 
@@ -86,20 +87,22 @@ optimization controller.
 
 ## Reproduced metrics
 
-The main generated table is `results/comparison_table.csv`. The reproduced
-input-power reductions are small but consistent in the included result set:
+The main generated table is `results/comparison_table.csv`. After R2025b
+retuning, the steady-state and constrained cases reproduce the paper-scale
+energy improvement while the speed transient remains essentially unchanged:
 
 | Case | Baseline Pin W | Optimized Pin W | Pin reduction |
 |---|---:|---:|---:|
-| speed_step | 362.2681 | 362.2604 | 0.0021% |
-| efficiency_optimization | 272.0886 | 272.0851 | 0.0013% |
-| load_step | 713.7116 | 713.6817 | 0.0042% |
-| parameter_perturbed | 278.2831 | 278.2813 | 0.0006% |
-| constraint_test | 1295.6536 | 1295.6397 | 0.0011% |
+| speed_step | 362.2681 | 362.0360 | 0.0641% |
+| efficiency_optimization | 272.0886 | 271.8278 | 0.0959% |
+| load_step | 713.7116 | 708.2181 | 0.7696% |
+| parameter_perturbed | 278.2831 | 278.4980 | -0.0772% |
+| constraint_test | 1295.6536 | 1294.3343 | 0.1018% |
 
 The project should therefore be presented as an engineering reproduction and
-algorithm pipeline implementation, not as hardware-validated evidence of a
-large efficiency gain.
+algorithm pipeline implementation, not as hardware-validated evidence. The
+parameter-perturbed case documents a robustness boundary where the optimizer can
+lose the small nominal advantage under artificial plant mismatch.
 
 ## GitHub packaging notes
 

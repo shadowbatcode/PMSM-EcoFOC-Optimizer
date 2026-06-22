@@ -76,15 +76,16 @@ for k = 1:n
     caseRun.T_L(k) = scenario.load_torque(t(k));
 end
 
-% Compatibility aliases expected by metric and plotting scripts.
-caseRun.ud = zeros(n, 1);
-caseRun.uq = zeros(n, 1);
-caseRun.Pin_lpf = zeros(n, 1);
-caseRun.P_ac = zeros(n, 1);
-caseRun.demod_signal = zeros(n, 1);
-caseRun.id_bar_before = caseRun.id_bar;
-caseRun.dPin_dt = [0; diff(caseRun.Pin)] ./ max(p.Ts, eps);
-caseRun.perturbation = caseRun.id_ref - caseRun.id_bar;
+% Keep compatibility aliases accurate if an older model omits diagnostics.
+if ~isfield(caseRun, 'id_bar_before') || all(caseRun.id_bar_before == 0)
+    caseRun.id_bar_before = caseRun.id_bar;
+end
+if ~isfield(caseRun, 'dPin_dt') || all(caseRun.dPin_dt == 0)
+    caseRun.dPin_dt = [0; diff(caseRun.Pin)] ./ max(p.Ts, eps);
+end
+if ~isfield(caseRun, 'perturbation') || all(caseRun.perturbation == 0)
+    caseRun.perturbation = caseRun.id_ref - caseRun.id_bar;
+end
 end
 
 function ts = get_timeseries(out, name)

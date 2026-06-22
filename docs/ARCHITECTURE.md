@@ -95,6 +95,33 @@ to duplicate every equation as individual Simulink primitive blocks; instead,
 they provide a reproducible Simulink execution boundary around the tested
 MATLAB control engine.
 
+`scripts/build_component_models.m` additionally generates R2025b visible
+component models:
+
+- `models/PMSM_FOC_Component_Baseline.slx`
+- `models/PMSM_FOC_Component_Optimization.slx`
+
+These models implement the drive as separate Simulink MATLAB Function
+components with explicit Unit Delay state feedback:
+
+```text
+omega_ref -> Speed_Controller_PID -> Safety_Projection
+                                  -> Current_Controller_PI
+                                  -> PMSM_dq_Plant
+                                  -> Power_Efficiency_Monitor
+             ModelFree_Optimizer --^
+```
+
+The component models are intended for inspection, teaching, and paper figures.
+They contain no top-level S-Function block and can be run with
+`scripts/run_component_efficiency_case.m`.
+
+`scripts/beautify_component_models.m` applies the paper-facing layout: separated
+fast vector-control and outer optimization layers, colored component groups,
+named signals, explicit Unit Delay state banks, and paper-aligned logged signal
+sinks. `scripts/generate_paper_aligned_outputs.m` exports the Chapter 3 figure
+set and result-comparison tables from the beautified component model.
+
 ## Signal contract
 
 The S-Function emits the ordered signal vector defined in

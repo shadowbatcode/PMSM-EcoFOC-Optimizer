@@ -43,7 +43,7 @@ overshoot_pct = max(0, (max(run.omega_rpm) - omega_final) / max(abs(omega_final)
 rise_time_s = estimate_rise_time(run, omega_final);
 settling_time_s = estimate_settling_time(run, omega_final, 0.02);
 steady_error_rpm = mean(omega_final - omega_rpm_tail);
-recovery_time_s = estimate_load_recovery(run, p);
+recovery_time_s = estimate_load_recovery(run);
 convergence_time_s = estimate_optimizer_convergence(run, method, p);
 mechanical_output_W = mean(run.Pout(tail));
 efficiency_pct = mean(run.eta(tail)) * 100;
@@ -86,7 +86,7 @@ else
 end
 end
 
-function tr = estimate_load_recovery(run, p)
+function tr = estimate_load_recovery(run)
 idx = find(abs(diff(run.T_L)) > 1e-12, 1, 'first');
 if isempty(idx)
     tr = NaN;
@@ -95,11 +95,17 @@ end
 idx = idx + 1;
 target = run.omega_ref(end) * 60/(2*pi);
 band = 0.02 * max(abs(target), 1);
-post = find(abs(run.omega_rpm(idx:end) - target) <= band, 1, 'first');
+left_band = find(abs(run.omega_rpm(idx:end) - target) > band, 1, 'first');
+if isempty(left_band)
+    tr = 0;
+    return;
+end
+search_start = idx + left_band - 1;
+post = find(abs(run.omega_rpm(search_start:end) - target) <= band, 1, 'first');
 if isempty(post)
     tr = NaN;
 else
-    tr = run.t(idx + post - 1) - run.t(idx);
+    tr = run.t(search_start + post - 1) - run.t(idx);
 end
 end
 

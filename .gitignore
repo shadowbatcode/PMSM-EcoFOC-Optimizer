@@ -2,6 +2,7 @@
 *.asv
 *.m~
 *.tmp
+*.autosave
 
 # Simulink generated caches and code generation output
 slprj/
