@@ -27,6 +27,20 @@ visible component Simulink models.
   `tables_chapter3/`.
 - Appendix core-code extract in `docs/附录A_核心程序代码.md`.
 
+## Paper Method Figures
+
+The supplementary paper figures below explain the control idea and modeling
+relationship. They are used as method illustrations; the response curves in the
+next section are regenerated simulation outputs.
+
+| Control concept | Figure |
+|---|---|
+| PMSM simplified model and vector-control relationship | ![PMSM simplified modeling and vector control](figures_chapter3/PMSM简化建模与矢量控制关系图.png) |
+| Current loop, speed loop, and outer optimizer time scales | ![Control time-scale relationship](figures_chapter3/电流环、速度环与外层优化器时间尺度关系图.png) |
+| PMSM dual-layer energy self-optimization workflow | ![PMSM dual-layer workflow](figures_chapter3/PMSM双层能效自寻优流程图.png) |
+| PMSM dual-layer energy self-optimization control structure | ![PMSM dual-layer control structure](figures_chapter3/PMSM双层能效自寻优控制结构图.png) |
+| PMSM dual-layer energy self-optimization overview | ![PMSM dual-layer overview](figures_chapter3/PMSM%20双层能效自寻优控制结构图.png) |
+
 ## Real Simulation Figures
 
 The following images are the current repository outputs regenerated from the
@@ -138,7 +152,9 @@ run('scripts/run_all.m')
 |   |-- fig3_2_model_free_optimizer_subsystem.png
 |   |-- fig3_3_speed_step_response.png
 |   |-- fig3_4_power_id_convergence.png
-|   `-- fig3_5_disturbance_response.png
+|   |-- fig3_5_disturbance_response.png
+|   |-- PMSM*.png
+|   `-- 电流环*.png
 |-- models/
 |   |-- PMSM_FOC_Baseline.slx
 |   |-- PMSM_FOC_Optimization.slx
